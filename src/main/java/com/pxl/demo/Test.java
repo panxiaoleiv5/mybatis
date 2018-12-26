@@ -14,5 +14,6 @@ public class Test {
         UserInfoService userInfoService = new UserInfoServiceImpl();
         User user = userInfoService.loadUser(1L);
         System.out.println(user.toString());
+        System.out.println("hahahaa");
     }
 }
