@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pxl.demo.dao.UserMapper">
+	<resultMap id="userResult" type="user">
+		<result property="id" column="id" />
+		<result property="userId" column="user_id" />
+		<result property="personId" column="person_id" />
+		<result property="phoneNo" column="phone_no" />
+		<result property="userName" column="user_name" />
+		<result property="jobNum" column="job_num" />
+		<result property="customerId" column="customer_id" />
+		<result property="rankOrder" column="rank_order" />
+		<result property="telephone2" column="telephone2" />
+		<result property="telephone1" column="telephone1" />
+		<result property="qq" column="qq" />
+		<result property="weixin" column="weixin" />
+		<result property="email" column="email" />
+		<result property="sex" column="sex" />
+		<result property="photoUrl" column="photo_url" />
+		<result property="photoLastUpdateTime" column="photo_last_update_time" />
+		<result property="contactInfoPrivate" column="contact_info_private" />
+		<result property="sendSmsAuthority" column="send_sms_authority" />
+		<result property="deleteFlag" column="deleteFlag" />
+		<result property="createTime" column="create_time" />
+		<result property="lastUpdateTime" column="last_update_time" />
+		<result property="pinyin" column="pinyin" />
+		<result property="description" column="description" />
+		<result property="accountId" column="account_id" />
+		<result property="loginType" column="loginType" />
+		<result property="nativePlace" column="native_place" />
+		<result property="employmentDate" column="employment_date" />
+		<result property="education" column="education" />
+		<result property="salary" column="salary" />
+		<result property="promotion" column="promotion" />
+		<result property="training" column="training" />
+		<result property="reward" column="reward" />
+		<result property="signUrl" column="sign_url" />
+		<result property="qrcodeUrl" column="qrcode_url" />
+		<result property="personalIntro" column="personal_intro" />
+	</resultMap>
+	<resultMap id="userExpResult" type="user" extends="userResult">
+		<result property="positionName" column="position_name" />
+		<result property="departmentName" column="department_name" />
+		<result property="departmentId" column="depart_id" />
+	</resultMap>
+
+	<sql id="userWhere">
+		<if test="list != null and list.size > 0 ">
+			and d.depart_id in <foreach item="departId" collection="list" open="(" separator="," close=")">#{departId}</foreach>
+		</if>
+		<if test="startTime != null">
+			<![CDATA[ and u.update_time >= #{startTime} ]]>
+		</if>
+		<if test="endTime != null">
+			<![CDATA[  and u.update_time >= #{endTime}  ]]>
+		</if>
+		<if test="inquireKey != null and inquireKey!=''">
+			<![CDATA[ and (d.department_name like concat('%',#{inquireKey},'%') or u.user_name like concat('%',#{inquireKey},'%') or u.job_num like concat('%',#{inquireKey},'%') or u.pinyin like concat('%',#{inquireKey},'%') ) ]]>
+		</if>
+	</sql>
+
+	<sql id="userColumn">
+		id,user_id,person_id,phone_no,user_name,job_num,customer_id,rank_order,telephone2,telephone1,qq,weixin,email,sex,photo_url,photo_last_update_time,contact_info_private,send_sms_authority,deleteFlag,create_time,last_update_time,pinyin,description,account_id,loginType,native_place,employment_date,education,salary,promotion,training,reward,sign_url,qrcode_url,personal_intro
+	</sql>
+
+	<sql id="userExpColumn">
+		u.id,u.user_id,u.person_id,u.phone_no,u.user_name,u.job_num,u.customer_id,u.rank_order,u.telephone2,u.telephone1,u.qq,u.weixin,u.email,u.sex,u.photo_url,u.photo_last_update_time,u.contact_info_private,u.send_sms_authority,u.deleteFlag,u.create_time,u.last_update_time,u.pinyin,u.description,u.account_id,u.loginType,u.native_place,u.employment_date,u.education,u.salary,u.promotion,u.training,u.reward,u.sign_url,u.qrcode_url,u.personal_intro,
+		r.position_name,d.department_name,d.depart_id
+	</sql>
+
+	<select id="loadUserByUserId" resultMap="userResult"
+			parameterType="java.lang.Long">
+		select <include refid="userColumn" /> from gw_user WHERE user_id=#{value}
+	</select>
+
+</mapper>
